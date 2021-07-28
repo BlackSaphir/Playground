@@ -1,0 +1,49 @@
+{
+  "Category": "",
+  "Description": "",
+  "EngineAssociation": "5.0EA",
+  "FileVersion": 3,
+  "Modules": [
+    {
+      "AdditionalDependencies": [
+        "Engine"
+      ],
+      "LoadingPhase": "Default",
+      "Name": "Playground",
+      "Type": "Runtime"
+    }
+  ],
+  "Plugins": [
+    {
+      "Enabled": false,
+      "Name": "OculusVR",
+      "SupportedTargetPlatforms": [
+        "Win32",
+        "Win64",
+        "Android"
+      ]
+    },
+    {
+      "Enabled": false,
+      "Name": "SteamVR",
+      "SupportedTargetPlatforms": [
+        "Win32",
+        "Win64",
+        "Linux"
+      ]
+    },
+    {
+      "Enabled": true,
+      "Name": "GameplayAbilities"
+    },
+    {
+      "Enabled": true,
+      "Name": "Bridge",
+      "SupportedTargetPlatforms": [
+        "Win64",
+        "Mac",
+        "Linux"
+      ]
+    }
+  ]
+}
