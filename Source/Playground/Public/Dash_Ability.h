@@ -17,6 +17,18 @@ class PLAYGROUND_API UDash_Ability : public UPG_GameplayAbility
 
 
 	virtual void ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData) override;
+
+
+	UPROPERTY(EditAnywhere)
+	UAnimMontage* Dash_Montage;
+
+	UPROPERTY(EditAnywhere)
+		float Strength;
+
+	UPROPERTY(EditAnywhere)
+		float Duration;
+
+
 };
 
 

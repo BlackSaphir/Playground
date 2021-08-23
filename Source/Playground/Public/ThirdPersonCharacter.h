@@ -8,6 +8,7 @@
 #include "AbilitySystemInterface.h"
 #include "Abilities/GameplayAbility.h"
 #include "PG_GameplayAbility.h"
+#include "Abilities/Tasks/AbilityTask.h"
 #include "ThirdPersonCharacter.generated.h"
 
 UCLASS()
@@ -15,7 +16,7 @@ class PLAYGROUND_API AThirdPersonCharacter : public ACharacter, public IAbilityS
 {
 	GENERATED_BODY()
 
-		// Functions
+	// Functions
 
 public:
 	// Sets default values for this character's properties
@@ -64,34 +65,37 @@ protected:
 public:
 
 	UPROPERTY(EditAnywhere, Category = Camera)
-		class USpringArmComponent* CameraBoom;
+	class USpringArmComponent* CameraBoom;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Camera)
-		class UCameraComponent* FollowCamera;
+	class UCameraComponent* FollowCamera;
 
 	UPROPERTY()
-		class UCharacterMovementComponent* CharacterMovementclass;
+	class UCharacterMovementComponent* CharacterMovementclass;
 
 	UPROPERTY(EditAnywhere, Category = Camera)
-		float BaseTurnRate;
+	float BaseTurnRate;
 
 	UPROPERTY(EditAnywhere, Category = Camera)
-		float BaseLookUpRate;
+	float BaseLookUpRate;
 
 	UPROPERTY(BlueprintReadOnly)
-		class UAbilitySystemComponent* AbilitySystem;
+	class UAbilitySystemComponent* AbilitySystem;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Abilities)
-		TArray<TSubclassOf<class UPG_GameplayAbility>> Abilities;
+	TArray<TSubclassOf<class UPG_GameplayAbility>> Abilities;
+
+	UPROPERTY(EditAnywhere)
+	class UAbilityTask* AbilityTask;
 
 	UPROPERTY(EditAnywhere, Category = "DoubleJump")
-		float Jumpheight = 400;
+	float Jumpheight = 400;
 
 	UPROPERTY(EditAnywhere, Category = "DoubleJump")
-		int Jumpcount = 0;
+	int Jumpcount = 1;
 
 	UPROPERTY(EditAnywhere, Category = "DoubleJump")
-		int MaxJumpCount = 1;
+	int MaxJumpCount = 2;
 
 	/** Returns CameraBoom subobject **/
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
