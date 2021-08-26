@@ -17,4 +17,5 @@ enum class EAbilityInput : uint8
 	Cancel		UMETA(DisplayName = "Cancel"),
 	Dash		UMETA(DisplayName = "Dash"),
 	DoubleJump	UMETA(DisplayName = "DoubleJump"),
+	Melee		UMETA(DisplayName = "Melee"),
 };

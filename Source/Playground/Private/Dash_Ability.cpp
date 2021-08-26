@@ -3,6 +3,7 @@
 
 #include "Dash_Ability.h"
 #include "GameFramework/RootMotionSource.h"
+#include "Abilities/GameplayAbility.h"
 #include "PG_AbilityTask_PlayMontageAndWaitForEvent.h"
 #include "Abilities/Tasks/AbilityTask_ApplyRootMotionConstantForce.h"
 #include "ThirdPersonCharacter.h"
