@@ -70,8 +70,6 @@ public:
 	UFUNCTION()
 		void Look(const FInputActionValue& Value);
 
-	UFUNCTION()
-		void Jump(const FInputActionValue& Value);
 
 
 

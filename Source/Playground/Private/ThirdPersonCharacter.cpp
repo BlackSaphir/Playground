@@ -85,12 +85,6 @@ void AThirdPersonCharacter::BeginPlay()
 }
 
 
-UAbilitySystemComponent* AThirdPersonCharacter::GetAbilitySystemComponent() const
-{
-	return AbilitySystem;
-}
-
-
 // Called every frame
 void AThirdPersonCharacter::Tick(float DeltaTime)
 {
@@ -137,7 +131,8 @@ void AThirdPersonCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInp
 
 		if (JumpAction)
 		{
-			PlayerEnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &AThirdPersonCharacter::Jump);
+			PlayerEnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &ACharacter::Jump);
+			PlayerEnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
 		}
 
 	}
@@ -167,6 +162,10 @@ void AThirdPersonCharacter::Look(const FInputActionValue& Value)
 	AddControllerPitchInput(Value[1] * (-1));
 }
 
+UAbilitySystemComponent* AThirdPersonCharacter::GetAbilitySystemComponent() const
+{
+	return AbilitySystem;
+}
 
 void AThirdPersonCharacter::Landed(const FHitResult& Hit)
 {
