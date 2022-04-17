@@ -4,10 +4,27 @@ using UnrealBuildTool;
 
 public class Playground : ModuleRules
 {
-	public Playground(ReadOnlyTargetRules Target) : base(Target)
-	{
-		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
+    public Playground(ReadOnlyTargetRules Target) : base(Target)
+    {
+        PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 
-        PublicDependencyModuleNames.AddRange(new string[] { "GameplayAbilities", "GameplayTags", "GameplayTasks", "Core", "CoreUObject", "Engine", "InputCore", "HeadMountedDisplay", "NavigationSystem", "AIModule" });
+        PublicDependencyModuleNames.AddRange(
+            new string[]
+            {
+                "GameplayAbilities",
+                "GameplayTags",
+                "GameplayTasks",
+                "Core",
+                "CoreUObject",
+                "Engine",
+                "InputCore",
+                "NavigationSystem",
+                "AIModule",
+                "EnhancedInput",
+
+            });
+
+
+
     }
 }

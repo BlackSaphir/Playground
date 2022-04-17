@@ -7,8 +7,12 @@
 #include "Components/InputComponent.h"
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
-#include "Kismet/GameplayStatics.h"
 #include "AbilitySystemComponent.h"
+#include "InputAction.h"
+#include "InputMappingContext.h"
+#include "EnhancedInputComponent.h"
+#include "EnhancedInputSubsystems.h"
+
 
 
 // Sets default values
@@ -31,7 +35,7 @@ AThirdPersonCharacter::AThirdPersonCharacter()
 	GetCharacterMovement()->RotationRate = FRotator(0.0f, 540.0f, 0.0f);
 	GetCharacterMovement()->JumpZVelocity = 600.0f;
 	GetCharacterMovement()->AirControl = 0.2f;
-	
+
 
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
 	CameraBoom->SetupAttachment(RootComponent);
@@ -74,25 +78,6 @@ void AThirdPersonCharacter::PossessedBy(AController* NewController)
 
 
 
-// Called to bind functionality to input
-void AThirdPersonCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
-{
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
-	check(PlayerInputComponent);
-	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
-	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
-
-	PlayerInputComponent->BindAxis("MoveForward", this, &AThirdPersonCharacter::MoveForward);
-	PlayerInputComponent->BindAxis("MoveRight", this, &AThirdPersonCharacter::MoveRight);
-
-	PlayerInputComponent->BindAxis("Turn", this, &APawn::AddControllerYawInput);
-	PlayerInputComponent->BindAxis("TurnRate", this, &AThirdPersonCharacter::TurnAtRate);
-	PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
-	PlayerInputComponent->BindAxis("LookUpRate", this, &AThirdPersonCharacter::LookUpAtRate);
-
-	AbilitySystem->BindAbilityActivationToInputComponent(PlayerInputComponent, FGameplayAbilityInputBinds("Confirm", "Cancel", "EAbilityInput", static_cast<int32>(EAbilityInput::Confirm), static_cast<int32>(EAbilityInput::Cancel)));
-}
-
 // Called when the game starts or when spawned
 void AThirdPersonCharacter::BeginPlay()
 {
@@ -113,38 +98,73 @@ void AThirdPersonCharacter::Tick(float DeltaTime)
 
 }
 
-void AThirdPersonCharacter::MoveForward(float Value)
+void AThirdPersonCharacter::PawnClientRestart()
 {
-	if ((Controller != nullptr) && (Value != 0.0f))
+	Super::PawnClientRestart();
+
+	// Make sure that we have a valid PlayerController.
+	if (APlayerController* PC = Cast<APlayerController>(GetController()))
+	{
+		// Get the Enhanced Input Local Player Subsystem from the Local Player related to our Player Controller.
+		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PC->GetLocalPlayer()))
+		{
+			// PawnClientRestart can run more than once in an Actor's lifetime, so start by clearing out any leftover mappings.
+			Subsystem->ClearAllMappings();
+
+			// Add each mapping context, along with their priority values. Higher values outprioritize lower values.
+			Subsystem->AddMappingContext(WalkInputMappingContext, BaseMappingPriority);
+		}
+	}
+}
+
+// Called to bind functionality to input
+void AThirdPersonCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+{
+	Super::SetupPlayerInputComponent(PlayerInputComponent);
+	check(PlayerInputComponent);
+
+	if (UEnhancedInputComponent* PlayerEnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent))
+	{
+		if (MovementAction)
+		{
+			PlayerEnhancedInputComponent->BindAction(MovementAction, ETriggerEvent::Triggered, this, &AThirdPersonCharacter::Movement);
+		}
+
+		if (LookAction)
+		{
+			PlayerEnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AThirdPersonCharacter::Look);
+		}
+
+		if (JumpAction)
+		{
+			PlayerEnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &AThirdPersonCharacter::Jump);
+		}
+
+	}
+
+	AbilitySystem->BindAbilityActivationToInputComponent(PlayerInputComponent, FGameplayAbilityInputBinds("Confirm", "Cancel", "EAbilityInput", static_cast<int32>(EAbilityInput::Confirm), static_cast<int32>(EAbilityInput::Cancel)));
+
+}
+
+void AThirdPersonCharacter::Movement(const FInputActionValue& Value)
+{
+	if (Controller != nullptr)
 	{
 		const FRotator Rotation = Controller->GetControlRotation();
 		const FRotator YawRotation(0, Rotation.Yaw, 0);
 
-		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
-		AddMovementInput(Direction, Value);
+		const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
+		const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
+
+		AddMovementInput(ForwardDirection, Value[1]);
+		AddMovementInput(RightDirection, Value[0]);
 	}
 }
 
-void AThirdPersonCharacter::MoveRight(float Value)
+void AThirdPersonCharacter::Look(const FInputActionValue& Value)
 {
-	if ((Controller != nullptr) && (Value != 0.0f))
-	{
-		const FRotator Rotation = Controller->GetControlRotation();
-		const FRotator YawRotation(0, Rotation.Yaw, 0);
-
-		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
-		AddMovementInput(Direction, Value);
-	}
-}
-
-void AThirdPersonCharacter::TurnAtRate(float Rate)
-{
-	AddControllerYawInput(Rate * BaseTurnRate * GetWorld()->GetDeltaSeconds());
-}
-
-void AThirdPersonCharacter::LookUpAtRate(float Rate)
-{
-	AddControllerPitchInput(Rate * BaseLookUpRate * GetWorld()->GetDeltaSeconds());
+	AddControllerYawInput(Value[0]);
+	AddControllerPitchInput(Value[1] * (-1));
 }
 
 

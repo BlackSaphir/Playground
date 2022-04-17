@@ -8,94 +8,110 @@
 #include "AbilitySystemInterface.h"
 #include "Abilities/GameplayAbility.h"
 #include "PG_GameplayAbility.h"
-#include "Abilities/Tasks/AbilityTask.h"
+#include "InputActionValue.h"
 #include "ThirdPersonCharacter.generated.h"
+
+class UInputAction;
+class UInputMappingContext;
+
 
 UCLASS()
 class PLAYGROUND_API AThirdPersonCharacter : public ACharacter, public IAbilitySystemInterface
 {
 	GENERATED_BODY()
 
-	// Functions
+		// Functions
 
 public:
 	// Sets default values for this character's properties
 	AThirdPersonCharacter();
 
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
+
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	/** Called for forwards/backward input */
-	void MoveForward(float Value);
+	virtual void PawnClientRestart() override;
 
-	/** Called for side to side input */
-	void MoveRight(float Value);
-
-	/**
-	 * Called via input to turn at a given rate.
-	 * @param Rate	This is a normalized rate, i.e. 1.0 means 100% of desired turn rate
-	 */
-	void TurnAtRate(float Rate);
-
-	/**
-	 * Called via input to turn look up/down at a given rate.
-	 * @param Rate	This is a normalized rate, i.e. 1.0 means 100% of desired turn rate
-	 */
-	void LookUpAtRate(float Rate);
 
 
 	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	void PossessedBy(AController* NewController) override;
 
 	virtual void Landed(const FHitResult& Hit) override;
 
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-
 	virtual class UAbilitySystemComponent* GetAbilitySystemComponent() const override;
+
+
+	// Movement
+
+	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Controls|Input Actions")
+		UInputAction* MovementAction;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Controls|Input Actions")
+		UInputAction* LookAction;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Controls|Input Actions")
+		UInputAction* JumpAction;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Controls|Input Mapping")
+		UInputMappingContext* WalkInputMappingContext;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Controls|Input Mapping")
+		int32 BaseMappingPriority = 0;
+
+	UFUNCTION()
+		void Movement(const FInputActionValue& Value);
+
+	UFUNCTION()
+		void Look(const FInputActionValue& Value);
+
+	UFUNCTION()
+		void Jump(const FInputActionValue& Value);
+
 
 
 
 	// Variables
 
-
 public:
 
 	UPROPERTY(EditAnywhere, Category = Camera)
-	class USpringArmComponent* CameraBoom;
+		class USpringArmComponent* CameraBoom;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Camera)
-	class UCameraComponent* FollowCamera;
+		class UCameraComponent* FollowCamera;
 
 	UPROPERTY()
-	class UCharacterMovementComponent* CharacterMovementclass;
+		class UCharacterMovementComponent* CharacterMovementclass;
 
 	UPROPERTY(EditAnywhere, Category = Camera)
-	float BaseTurnRate;
+		float BaseTurnRate;
 
 	UPROPERTY(EditAnywhere, Category = Camera)
-	float BaseLookUpRate;
+		float BaseLookUpRate;
 
 	UPROPERTY(BlueprintReadOnly)
-	class UAbilitySystemComponent* AbilitySystem;
+		class UAbilitySystemComponent* AbilitySystem;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Abilities)
-	TArray<TSubclassOf<class UPG_GameplayAbility>> Abilities;
+		TArray<TSubclassOf<class UPG_GameplayAbility>> Abilities;
 
 	UPROPERTY(EditAnywhere)
-	class UAbilityTask* AbilityTask;
+		class UAbilityTask* AbilityTask;
 
 	UPROPERTY(EditAnywhere, Category = "DoubleJump")
-	float Jumpheight = 400;
+		float Jumpheight = 400;
 
 	UPROPERTY(EditAnywhere, Category = "DoubleJump")
-	int Jumpcount = 1;
+		int Jumpcount = 1;
 
 	UPROPERTY(EditAnywhere, Category = "DoubleJump")
-	int MaxJumpCount = 2;
+		int MaxJumpCount = 2;
 
 	/** Returns CameraBoom subobject **/
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
@@ -103,3 +119,4 @@ public:
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 
 };
+
