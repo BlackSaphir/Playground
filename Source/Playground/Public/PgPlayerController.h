@@ -3,16 +3,15 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/GameModeBase.h"
-#include "PG_GameMode.generated.h"
+#include "GameFramework/PlayerController.h"
+#include "PgPlayerController.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class PLAYGROUND_API APG_GameMode : public AGameModeBase
+class PLAYGROUND_API APgPlayerController : public APlayerController
 {
 	GENERATED_BODY()
-
-		APG_GameMode();
+	
 };

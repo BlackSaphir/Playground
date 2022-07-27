@@ -4,16 +4,16 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "Placement_Object.generated.h"
+#include "PlacementObject.generated.h"
 
 UCLASS()
-class PLAYGROUND_API APlacement_Object : public AActor
+class PLAYGROUND_API APlacementObject : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	APlacement_Object();
+	APlacementObject();
 
 protected:
 	// Called when the game starts or when spawned

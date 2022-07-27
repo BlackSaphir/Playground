@@ -3,14 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "PG_GameplayAbility.h"
-#include "Weapon_Base.generated.h"
+#include "PgGameplayAbility.h"
+#include "WeaponBase.generated.h"
 
 /**
  *
  */
 UCLASS()
-class PLAYGROUND_API UWeapon_Base : public UPG_GameplayAbility
+class PLAYGROUND_API UWeaponBase : public UPgGameplayAbility
 {
 	GENERATED_BODY()
 
@@ -20,7 +20,7 @@ public:
 		float Damage;
 
 	UPROPERTY(EditAnywhere)
-		UStaticMesh* Weapon_Mesh;
+		UStaticMesh* WeaponMesh;
 
 	UPROPERTY(EditAnywhere)
 		int Ammunition;

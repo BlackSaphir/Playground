@@ -3,7 +3,7 @@
 #pragma once
 
 #include "Abilities/Tasks/AbilityTask.h"
-#include "PG_AbilityTask_PlayMontageAndWaitForEvent.generated.h"
+#include "PgAbilityTaskPlayMontageAndWaitForEvent.generated.h"
 
 class UAbilitySystemComponent;
 
@@ -15,13 +15,13 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FPG_PlayMontageAndWaitForEvent, FGa
  *
  */
 UCLASS()
-class PLAYGROUND_API UPG_AbilityTask_PlayMontageAndWaitForEvent : public UAbilityTask
+class PLAYGROUND_API UPgAbilityTaskPlayMontageAndWaitForEvent : public UAbilityTask
 {
 	GENERATED_BODY()
 
 public:
 
-	UPG_AbilityTask_PlayMontageAndWaitForEvent(const FObjectInitializer& ObjectInitializer);
+	UPgAbilityTaskPlayMontageAndWaitForEvent(const FObjectInitializer& ObjectInitializer);
 	virtual void Activate() override;
 	virtual void ExternalCancel() override;
 	virtual FString GetDebugString() const override;
@@ -44,7 +44,7 @@ public:
 
 
 	UFUNCTION(BlueprintCallable, Category = "Ability|Tasks", meta = (HidePin = "OwningAbility", DefaultToSelf = "OwningAbility", BlueprintInternalUseOnly = "TRUE"))
-		static UPG_AbilityTask_PlayMontageAndWaitForEvent* PlayMontageAndWaitForEvent(
+		static UPgAbilityTaskPlayMontageAndWaitForEvent* PlayMontageAndWaitForEvent(
 			UGameplayAbility* OwningAbility,
 			FName TaskInstanceName,
 			UAnimMontage* MontageToPlay,

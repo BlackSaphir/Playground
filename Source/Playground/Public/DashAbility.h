@@ -3,14 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "PG_GameplayAbility.h"
-#include "Dash_Ability.generated.h"
+#include "PgGameplayAbility.h"
+#include "DashAbility.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class PLAYGROUND_API UDash_Ability : public UPG_GameplayAbility
+class PLAYGROUND_API UDashAbility : public UPgGameplayAbility
 {
 	GENERATED_BODY()
 
@@ -19,7 +19,7 @@ class PLAYGROUND_API UDash_Ability : public UPG_GameplayAbility
 
 
 	UPROPERTY(EditAnywhere)
-	UAnimMontage* Dash_Montage;
+	UAnimMontage* DashMontage;
 
 	UPROPERTY(EditAnywhere)
 		float Strength;

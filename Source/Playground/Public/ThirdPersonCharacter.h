@@ -7,7 +7,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "AbilitySystemInterface.h"
 #include "Abilities/GameplayAbility.h"
-#include "PG_GameplayAbility.h"
+#include "PgGameplayAbility.h"
 #include "InputActionValue.h"
 #include "ThirdPersonCharacter.generated.h"
 
@@ -97,7 +97,7 @@ public:
 		class UAbilitySystemComponent* AbilitySystem;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Abilities)
-		TArray<TSubclassOf<class UPG_GameplayAbility>> Abilities;
+		TArray<TSubclassOf<class UPgGameplayAbility>> Abilities;
 
 	UPROPERTY(EditAnywhere)
 		class UAbilityTask* AbilityTask;

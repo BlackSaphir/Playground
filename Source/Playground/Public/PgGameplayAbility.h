@@ -5,13 +5,13 @@
 #include "CoreMinimal.h"
 #include "Abilities/GameplayAbility.h"
 #include "Playground.h"
-#include "PG_GameplayAbility.generated.h"
+#include "PgGameplayAbility.generated.h"
 
 /**
  *
  */
 UCLASS()
-class PLAYGROUND_API UPG_GameplayAbility : public UGameplayAbility
+class PLAYGROUND_API UPgGameplayAbility : public UGameplayAbility
 {
 	GENERATED_BODY()
 

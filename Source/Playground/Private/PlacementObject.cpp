@@ -1,10 +1,10 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Placement_Object.h"
+#include "PlacementObject.h"
 
 // Sets default values
-APlacement_Object::APlacement_Object()
+APlacementObject::APlacementObject()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -23,14 +23,14 @@ APlacement_Object::APlacement_Object()
 }
 
 // Called when the game starts or when spawned
-void APlacement_Object::BeginPlay()
+void APlacementObject::BeginPlay()
 {
 	Super::BeginPlay();
 	
 }
 
 // Called every frame
-void APlacement_Object::Tick(float DeltaTime)
+void APlacementObject::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 

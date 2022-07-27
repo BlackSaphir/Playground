@@ -52,6 +52,7 @@ AThirdPersonCharacter::AThirdPersonCharacter()
 }
 
 
+// Give player abilities based on BP
 void AThirdPersonCharacter::PossessedBy(AController* NewController)
 {
 	Super::PossessedBy(NewController);
@@ -62,7 +63,7 @@ void AThirdPersonCharacter::PossessedBy(AController* NewController)
 		{
 			if (Abilities.IsValidIndex(0))
 			{
-				for (TSubclassOf<UPG_GameplayAbility>& DefaultAbility : Abilities)
+				for (TSubclassOf<UPgGameplayAbility>& DefaultAbility : Abilities)
 				{
 					AbilitySystem->GiveAbility(FGameplayAbilitySpec(DefaultAbility, 1, static_cast<int32>(DefaultAbility.GetDefaultObject()->AbilityInputID), this));
 				}

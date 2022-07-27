@@ -3,14 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "PG_GameplayAbility.h"
-#include "DoubleJump_Ability.generated.h"
+#include "PgGameplayAbility.h"
+#include "DoubleJumpAbility.generated.h"
 
 /**
  *
  */
 UCLASS()
-class PLAYGROUND_API UDoubleJump_Ability : public UPG_GameplayAbility
+class PLAYGROUND_API UDoubleJumpAbility : public UPgGameplayAbility
 {
 	GENERATED_BODY()
 

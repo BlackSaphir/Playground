@@ -1,24 +1,24 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "PG_AbilityTask_PlayMontageAndWaitForEvent.h"
+#include "PgAbilityTaskPlayMontageAndWaitForEvent.h"
 #include "AbilitySystemComponent.h"
 #include "AbilitySystemGlobals.h"
 #include "GameFramework/Character.h"
 #include "Animation/AnimInstance.h"
 
-UPG_AbilityTask_PlayMontageAndWaitForEvent::UPG_AbilityTask_PlayMontageAndWaitForEvent(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
+UPgAbilityTaskPlayMontageAndWaitForEvent::UPgAbilityTaskPlayMontageAndWaitForEvent(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
 	Rate = 1.f;
 	bStopWhenAbilityEnds = true;
 }
 
-UAbilitySystemComponent* UPG_AbilityTask_PlayMontageAndWaitForEvent::GetTargetASC()
+UAbilitySystemComponent* UPgAbilityTaskPlayMontageAndWaitForEvent::GetTargetASC()
 {
 	return Cast<UAbilitySystemComponent>(AbilitySystemComponent);
 }
 
-void UPG_AbilityTask_PlayMontageAndWaitForEvent::OnMontageBlendingOut(UAnimMontage* Montage, bool bInterrupted)
+void UPgAbilityTaskPlayMontageAndWaitForEvent::OnMontageBlendingOut(UAnimMontage* Montage, bool bInterrupted)
 {
 	if (Ability && Ability->GetCurrentMontage() == MontageToPlay)
 	{
@@ -51,7 +51,7 @@ void UPG_AbilityTask_PlayMontageAndWaitForEvent::OnMontageBlendingOut(UAnimMonta
 	}
 }
 
-void UPG_AbilityTask_PlayMontageAndWaitForEvent::OnAbilityCancelled()
+void UPgAbilityTaskPlayMontageAndWaitForEvent::OnAbilityCancelled()
 {
 	if (StopPlayingMontage())
 	{
@@ -62,7 +62,7 @@ void UPG_AbilityTask_PlayMontageAndWaitForEvent::OnAbilityCancelled()
 	}
 }
 
-void UPG_AbilityTask_PlayMontageAndWaitForEvent::OnMontageEnded(UAnimMontage* Montage, bool bInterrupted)
+void UPgAbilityTaskPlayMontageAndWaitForEvent::OnMontageEnded(UAnimMontage* Montage, bool bInterrupted)
 {
 	if (!bInterrupted)
 	{
@@ -73,7 +73,7 @@ void UPG_AbilityTask_PlayMontageAndWaitForEvent::OnMontageEnded(UAnimMontage* Mo
 	}
 }
 
-void UPG_AbilityTask_PlayMontageAndWaitForEvent::OnGameplayEvent(FGameplayTag EventTag, const FGameplayEventData* Payload)
+void UPgAbilityTaskPlayMontageAndWaitForEvent::OnGameplayEvent(FGameplayTag EventTag, const FGameplayEventData* Payload)
 {
 	if (ShouldBroadcastAbilityTaskDelegates())
 	{
@@ -84,11 +84,11 @@ void UPG_AbilityTask_PlayMontageAndWaitForEvent::OnGameplayEvent(FGameplayTag Ev
 	}
 }
 
-UPG_AbilityTask_PlayMontageAndWaitForEvent* UPG_AbilityTask_PlayMontageAndWaitForEvent::PlayMontageAndWaitForEvent(UGameplayAbility* OwningAbility, FName TaskInstanceName, UAnimMontage* MontageToPlay, FGameplayTagContainer EventTags, float Rate, FName StartSection, bool bStopWhenAbilityEnds, float AnimRootMotionTranslationScale)
+UPgAbilityTaskPlayMontageAndWaitForEvent* UPgAbilityTaskPlayMontageAndWaitForEvent::PlayMontageAndWaitForEvent(UGameplayAbility* OwningAbility, FName TaskInstanceName, UAnimMontage* MontageToPlay, FGameplayTagContainer EventTags, float Rate, FName StartSection, bool bStopWhenAbilityEnds, float AnimRootMotionTranslationScale)
 {
 	UAbilitySystemGlobals::NonShipping_ApplyGlobalAbilityScaler_Rate(Rate);
 
-	UPG_AbilityTask_PlayMontageAndWaitForEvent* MyObj = NewAbilityTask<UPG_AbilityTask_PlayMontageAndWaitForEvent>(OwningAbility, TaskInstanceName);
+	UPgAbilityTaskPlayMontageAndWaitForEvent* MyObj = NewAbilityTask<UPgAbilityTaskPlayMontageAndWaitForEvent>(OwningAbility, TaskInstanceName);
 	MyObj->MontageToPlay = MontageToPlay;
 	MyObj->EventTags = EventTags;
 	MyObj->Rate = Rate;
@@ -99,7 +99,7 @@ UPG_AbilityTask_PlayMontageAndWaitForEvent* UPG_AbilityTask_PlayMontageAndWaitFo
 	return MyObj;
 }
 
-void UPG_AbilityTask_PlayMontageAndWaitForEvent::Activate()
+void UPgAbilityTaskPlayMontageAndWaitForEvent::Activate()
 {
 	if (Ability == nullptr)
 	{
@@ -115,7 +115,7 @@ void UPG_AbilityTask_PlayMontageAndWaitForEvent::Activate()
 		UAnimInstance* AnimInstance = ActorInfo->GetAnimInstance();
 		if (AnimInstance != nullptr)
 		{
-			EventHandle = AbilitySystem->AddGameplayEventTagContainerDelegate(EventTags, FGameplayEventTagMulticastDelegate::FDelegate::CreateUObject(this, &UPG_AbilityTask_PlayMontageAndWaitForEvent::OnGameplayEvent));
+			EventHandle = AbilitySystem->AddGameplayEventTagContainerDelegate(EventTags, FGameplayEventTagMulticastDelegate::FDelegate::CreateUObject(this, &UPgAbilityTaskPlayMontageAndWaitForEvent::OnGameplayEvent));
 
 			if (AbilitySystem->PlayMontage(Ability, Ability->GetCurrentActivationInfo(), MontageToPlay, Rate, StartSection) > 0.f)
 			{
@@ -124,12 +124,12 @@ void UPG_AbilityTask_PlayMontageAndWaitForEvent::Activate()
 					return;
 				}
 
-				CancelledHandle = Ability->OnGameplayAbilityCancelled.AddUObject(this, &UPG_AbilityTask_PlayMontageAndWaitForEvent::OnAbilityCancelled);
+				CancelledHandle = Ability->OnGameplayAbilityCancelled.AddUObject(this, &UPgAbilityTaskPlayMontageAndWaitForEvent::OnAbilityCancelled);
 
-				BlendingOutDelegate.BindUObject(this, &UPG_AbilityTask_PlayMontageAndWaitForEvent::OnMontageBlendingOut);
+				BlendingOutDelegate.BindUObject(this, &UPgAbilityTaskPlayMontageAndWaitForEvent::OnMontageBlendingOut);
 				AnimInstance->Montage_SetBlendingOutDelegate(BlendingOutDelegate, MontageToPlay);
 
-				MontageEndedDelegate.BindUObject(this, &UPG_AbilityTask_PlayMontageAndWaitForEvent::OnMontageEnded);
+				MontageEndedDelegate.BindUObject(this, &UPgAbilityTaskPlayMontageAndWaitForEvent::OnMontageEnded);
 				AnimInstance->Montage_SetEndDelegate(MontageEndedDelegate, MontageToPlay);
 
 				ACharacter* Character = Cast<ACharacter>(GetAvatarActor());
@@ -143,7 +143,7 @@ void UPG_AbilityTask_PlayMontageAndWaitForEvent::Activate()
 		}
 		else
 		{
-			ABILITY_LOG(Warning, TEXT("UPG_AbilityTask_PlayMontageAndWaitForEvent call to PlayMontage failed"));
+			ABILITY_LOG(Warning, TEXT("UPgAbilityTaskPlayMontageAndWaitForEvent call to PlayMontage failed"));
 		}
 	}
 
@@ -159,7 +159,7 @@ void UPG_AbilityTask_PlayMontageAndWaitForEvent::Activate()
 	SetWaitingOnAvatar();
 }
 
-void UPG_AbilityTask_PlayMontageAndWaitForEvent::ExternalCancel()
+void UPgAbilityTaskPlayMontageAndWaitForEvent::ExternalCancel()
 {
 	check(AbilitySystemComponent);
 
@@ -168,7 +168,7 @@ void UPG_AbilityTask_PlayMontageAndWaitForEvent::ExternalCancel()
 	Super::ExternalCancel();
 }
 
-void UPG_AbilityTask_PlayMontageAndWaitForEvent::OnDestroy(bool AbilityEnded)
+void UPgAbilityTaskPlayMontageAndWaitForEvent::OnDestroy(bool AbilityEnded)
 {
 	// Note: Clearing montage end delegate isn't necessary since its not a multicast and will be cleared when the next montage plays.
 	// (If we are destroyed, it will detect this and not do anything)
@@ -192,7 +192,7 @@ void UPG_AbilityTask_PlayMontageAndWaitForEvent::OnDestroy(bool AbilityEnded)
 	Super::OnDestroy(AbilityEnded);
 }
 
-bool UPG_AbilityTask_PlayMontageAndWaitForEvent::StopPlayingMontage()
+bool UPgAbilityTaskPlayMontageAndWaitForEvent::StopPlayingMontage()
 {
 	const FGameplayAbilityActorInfo* ActorInfo = Ability->GetCurrentActorInfo();
 	if (!ActorInfo)
@@ -228,7 +228,7 @@ bool UPG_AbilityTask_PlayMontageAndWaitForEvent::StopPlayingMontage()
 	return false;
 }
 
-FString UPG_AbilityTask_PlayMontageAndWaitForEvent::GetDebugString() const
+FString UPgAbilityTaskPlayMontageAndWaitForEvent::GetDebugString() const
 {
 	UAnimMontage* PlayingMontage = nullptr;
 	if (Ability)
