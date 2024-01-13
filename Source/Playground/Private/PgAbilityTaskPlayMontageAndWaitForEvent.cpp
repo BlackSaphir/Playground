@@ -4,7 +4,6 @@
 #include "PgAbilityTaskPlayMontageAndWaitForEvent.h"
 #include "AbilitySystemComponent.h"
 #include "AbilitySystemGlobals.h"
-#include "AbilitySystemLog.h"
 #include "GameFramework/Character.h"
 #include "Animation/AnimInstance.h"
 
@@ -144,13 +143,13 @@ void UPgAbilityTaskPlayMontageAndWaitForEvent::Activate()
 		}
 		else
 		{
-			ABILITY_LOG(Warning, TEXT("UPgAbilityTaskPlayMontageAndWaitForEvent call to PlayMontage failed"));
+			UE_LOG(LogTemp, Warning, TEXT("UPgAbilityTaskPlayMontageAndWaitForEvent call to PlayMontage failed"));
 		}
 	}
 
 	if (!bPlayedMontage)
 	{
-		ABILITY_LOG(Warning, TEXT("PG_AbilityTask_PlayMontageAndWaitForEvent called in Ability %s failed to play montage %s; Task Instance Name is %s"), *Ability->GetName(), *GetNameSafe(MontageToPlay), *InstanceName.ToString());
+		UE_LOG(LogTemp,Warning , TEXT("PG_AbilityTask_PlayMontageAndWaitForEvent called in Ability %s failed to play montage %s; Task Instance Name is %s"), *Ability->GetName(), *GetNameSafe(MontageToPlay), *InstanceName.ToString());
 		if (ShouldBroadcastAbilityTaskDelegates())
 		{
 			OnCancelled.Broadcast(FGameplayTag(), FGameplayEventData());
@@ -162,7 +161,7 @@ void UPgAbilityTaskPlayMontageAndWaitForEvent::Activate()
 
 void UPgAbilityTaskPlayMontageAndWaitForEvent::ExternalCancel()
 {
-	UAbilitySystemComponent* ASC = GetTargetASC();
+	check(AbilitySystemComponent.Get());
 
 	OnAbilityCancelled();
 
@@ -209,8 +208,7 @@ bool UPgAbilityTaskPlayMontageAndWaitForEvent::StopPlayingMontage()
 
 	// Check if the montage is still playing
 	// The ability would have been interrupted, in which case we should automatically stop the montage
-	UAbilitySystemComponent* ASC = GetTargetASC();
-	if (ASC && Ability)
+	if (AbilitySystemComponent.Get() && Ability)
 	{
 		if (AbilitySystemComponent->GetAnimatingAbility() == Ability && AbilitySystemComponent->GetCurrentMontage() == MontageToPlay)
 		{
