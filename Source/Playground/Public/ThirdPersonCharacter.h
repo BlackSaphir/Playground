@@ -58,6 +58,12 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Controls|Input Actions")
 		UInputAction* JumpAction;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Controls|Input Actions")
+		UInputAction* DashAction;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Controls|Input Actions")
+		UInputAction* HookAction;
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Controls|Input Mapping")
 		UInputMappingContext* WalkInputMappingContext;
 
@@ -70,6 +76,11 @@ public:
 	UFUNCTION()
 		void Look(const FInputActionValue& Value);
 
+	UFUNCTION()
+		void Dash();
+
+	UFUNCTION()
+		void Hook();
 
 
 

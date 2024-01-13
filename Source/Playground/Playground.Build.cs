@@ -8,7 +8,8 @@ public class Playground : ModuleRules
     {
         PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 
-        PublicDependencyModuleNames.AddRange(
+        PublicDependencyModuleNames.AddRange
+        (
             new string[]
             {
                 "GameplayAbilities",
@@ -21,8 +22,11 @@ public class Playground : ModuleRules
                 "NavigationSystem",
                 "AIModule",
                 "EnhancedInput",
+                "UMG"
 
-            });
+            }
+        );
+
 
 
 

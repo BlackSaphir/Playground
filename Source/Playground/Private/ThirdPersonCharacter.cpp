@@ -11,6 +11,9 @@
 #include "InputAction.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "DashAbility.h"
+#include "HookAbility.h"
+
 
 
 
@@ -59,6 +62,9 @@ void AThirdPersonCharacter::PossessedBy(AController* NewController)
 
 	if (AbilitySystem)
 	{
+		FGameplayAbilityActorInfo* ActorInfo = new FGameplayAbilityActorInfo();
+		ActorInfo->InitFromActor(this, this, AbilitySystem); AbilitySystem->AbilityActorInfo = TSharedPtr<FGameplayAbilityActorInfo>(ActorInfo);
+
 		if (HasAuthority())
 		{
 			if (Abilities.IsValidIndex(0))
@@ -135,10 +141,25 @@ void AThirdPersonCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInp
 			PlayerEnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
 		}
 
+		if (DashAction)
+		{
+			PlayerEnhancedInputComponent->BindAction(DashAction, ETriggerEvent::Started, this, &AThirdPersonCharacter::Dash);
+		}
+
+		if (HookAction)
+		{
+			PlayerEnhancedInputComponent->BindAction(HookAction, ETriggerEvent::Triggered, this, &AThirdPersonCharacter::Hook);
+		}
+
 	}
 
 	AbilitySystem->BindAbilityActivationToInputComponent(PlayerInputComponent, FGameplayAbilityInputBinds("Confirm", "Cancel", "EAbilityInput", static_cast<int32>(EAbilityInput::Confirm), static_cast<int32>(EAbilityInput::Cancel)));
 
+}
+
+UAbilitySystemComponent* AThirdPersonCharacter::GetAbilitySystemComponent() const
+{
+	return AbilitySystem;
 }
 
 void AThirdPersonCharacter::Movement(const FInputActionValue& Value)
@@ -162,10 +183,32 @@ void AThirdPersonCharacter::Look(const FInputActionValue& Value)
 	AddControllerPitchInput(Value[1] * (-1));
 }
 
-UAbilitySystemComponent* AThirdPersonCharacter::GetAbilitySystemComponent() const
+void AThirdPersonCharacter::Dash()
 {
-	return AbilitySystem;
+	UDashAbility* Dash = NewObject<UDashAbility>();
+	const FGameplayAbilitySpecHandle Handle;
+	const FGameplayAbilityActorInfo* ActorInfo = AbilitySystem->AbilityActorInfo.Get();
+	const FGameplayAbilityActivationInfo ActivationInfo;
+	const FGameplayEventData* TriggerEventData = nullptr;
+
+	if (GetMovementComponent()->IsFalling() == false)
+	{
+		Dash->Activate(Handle, ActorInfo, ActivationInfo, TriggerEventData, this);
+	}
+	delete Dash;
 }
+
+void AThirdPersonCharacter::Hook()
+{
+	UHookAbility* Hook = NewObject<UHookAbility>();
+	const FGameplayAbilitySpecHandle Handle;
+	const FGameplayAbilityActorInfo* ActorInfo = AbilitySystem->AbilityActorInfo.Get();
+	const FGameplayAbilityActivationInfo ActivationInfo;
+	const FGameplayEventData* TriggerEventData = nullptr;
+
+	Hook->ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
+}
+
 
 void AThirdPersonCharacter::Landed(const FHitResult& Hit)
 {

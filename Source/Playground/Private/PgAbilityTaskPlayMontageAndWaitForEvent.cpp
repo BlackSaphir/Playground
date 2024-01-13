@@ -4,6 +4,7 @@
 #include "PgAbilityTaskPlayMontageAndWaitForEvent.h"
 #include "AbilitySystemComponent.h"
 #include "AbilitySystemGlobals.h"
+#include "AbilitySystemLog.h"
 #include "GameFramework/Character.h"
 #include "Animation/AnimInstance.h"
 
@@ -161,7 +162,7 @@ void UPgAbilityTaskPlayMontageAndWaitForEvent::Activate()
 
 void UPgAbilityTaskPlayMontageAndWaitForEvent::ExternalCancel()
 {
-	check(AbilitySystemComponent);
+	UAbilitySystemComponent* ASC = GetTargetASC();
 
 	OnAbilityCancelled();
 
@@ -208,7 +209,8 @@ bool UPgAbilityTaskPlayMontageAndWaitForEvent::StopPlayingMontage()
 
 	// Check if the montage is still playing
 	// The ability would have been interrupted, in which case we should automatically stop the montage
-	if (AbilitySystemComponent && Ability)
+	UAbilitySystemComponent* ASC = GetTargetASC();
+	if (ASC && Ability)
 	{
 		if (AbilitySystemComponent->GetAnimatingAbility() == Ability && AbilitySystemComponent->GetCurrentMontage() == MontageToPlay)
 		{

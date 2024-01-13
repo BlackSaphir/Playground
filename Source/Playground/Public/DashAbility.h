@@ -6,6 +6,8 @@
 #include "PgGameplayAbility.h"
 #include "DashAbility.generated.h"
 
+class AThirdPersonCharacter;
+
 /**
  * 
  */
@@ -14,7 +16,11 @@ class PLAYGROUND_API UDashAbility : public UPgGameplayAbility
 {
 	GENERATED_BODY()
 
+public:
 
+	UDashAbility();
+	virtual ~UDashAbility() override;
+	void Activate(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData, AThirdPersonCharacter* Character);
 	virtual void ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData) override;
 
 
@@ -27,6 +33,7 @@ class PLAYGROUND_API UDashAbility : public UPgGameplayAbility
 	UPROPERTY(EditAnywhere)
 		float Duration;
 
+	AThirdPersonCharacter* CharacterRef;
 
 };
 

@@ -4,16 +4,19 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "PlacementObject.generated.h"
+#include "ClimbableWall.generated.h"
+
+class UWidgetComponent;
+
 
 UCLASS()
-class PLAYGROUND_API APlacementObject : public AActor
+class PLAYGROUND_API AClimbableWall : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	APlacementObject();
+	AClimbableWall();
 
 protected:
 	// Called when the game starts or when spawned
@@ -24,10 +27,12 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 
+	UPROPERTY(EditAnywhere)
+		UStaticMeshComponent* Wall;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		UWidgetComponent* HookWidget;
 
-private:
-
-	class UStaticMeshComponent* BaseMesh;
-
+	UPROPERTY(EditAnywhere)
+		USceneComponent* HookPoint;
 };
